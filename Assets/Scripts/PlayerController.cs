@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
 
   public Transform groundCheck;
 
+  public Transform wallCheck;
+
   // variables that are pretty self explanatary. just wanted this comment in here to section out the declarations. 
   private float movementInputDirection;
   private bool isFacingRight = true;
@@ -30,12 +32,16 @@ public class PlayerController : MonoBehaviour
   public float fallMultiplier = 1.8f;
   public float lowJumpMultiplier = 3f;
 
+  public float wallSlideSpeed;
+
   public int amountOfJumps = 1;
 
   // experimental variables that are working so far
-  public bool isFalling, isJumping, releasedDirection, isGrounded;
+  public bool isFalling, isJumping, releasedDirection, isGrounded, isTouchingWall, isWallSliding;
   public float groundCheckRadius;
   public LayerMask whatIsGround;
+
+  public float wallCheckDistance;
 
   public Vector2 size;
 
@@ -52,8 +58,9 @@ public class PlayerController : MonoBehaviour
   {
     CheckInput();
     CheckMovementDirection();
-    UpdateAnimations();
     CheckIfCanJump();
+    CheckIfWallSliding();
+    UpdateAnimations();
   }
 
   private void FixedUpdate()
@@ -67,8 +74,8 @@ public class PlayerController : MonoBehaviour
   private void CheckSurroundings()
   {
 
-    // isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
     isGrounded = Physics2D.OverlapBox(groundCheck.position, size, 180.0f, whatIsGround);
+    isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, whatIsGround);
   }
 
   private void CheckIfCanJump()
@@ -115,6 +122,20 @@ public class PlayerController : MonoBehaviour
     anim.SetBool("isWalking", isWalking);
     anim.SetBool("isGrounded", isGrounded);
     anim.SetFloat("yVelocity", rb.velocity.y);
+    anim.SetFloat("yRotation", rb.transform.rotation.y);
+    anim.SetBool("isWallSliding", isWallSliding);
+  }
+
+  private void CheckIfWallSliding()
+  {
+    if (isTouchingWall && !isGrounded && rb.velocity.y < 0)
+    {
+      isWallSliding = true;
+    }
+    else
+    {
+      isWallSliding = false;
+    }
   }
   private void CheckInput()
   {
@@ -176,7 +197,20 @@ public class PlayerController : MonoBehaviour
 
   private void ApplyMovement()
   {
-    rb.velocity = new Vector2(movementSpeed * movementInputDirection, rb.velocity.y);
+    if (!isTouchingWall)
+    {
+      rb.velocity = new Vector2(movementSpeed * movementInputDirection, rb.velocity.y);
+    }
+
+
+    if (isWallSliding)
+    {
+      if (rb.velocity.y < -wallSlideSpeed)
+      {
+        rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
+
+      }
+    }
   }
   private void Flip()
   {
@@ -210,6 +244,7 @@ public class PlayerController : MonoBehaviour
   {
     // Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
     Gizmos.DrawWireCube(groundCheck.position, size);
+    Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y, wallCheck.position.z));
   }
 }
 

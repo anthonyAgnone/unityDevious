@@ -6069,6 +6069,7 @@ Transform:
   m_Children:
   - {fileID: 1672020686}
   - {fileID: 1556824371}
+  - {fileID: 1006075607}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6112,19 +6113,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   groundCheck: {fileID: 1672020686}
+  wallCheck: {fileID: 1006075607}
   movementSpeed: 6.5
   jumpForce: 10.2
   fallMultiplier: 1.8
   lowJumpMultiplier: 3
+  wallSlideSpeed: 2
   amountOfJumps: 1
   isFalling: 0
   isJumping: 0
   releasedDirection: 0
   isGrounded: 0
+  isTouchingWall: 0
+  isWallSliding: 0
   groundCheckRadius: 0.3
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
+  wallCheckDistance: 0.7
   size: {x: 1.27, y: 0.1}
 --- !u!95 &918762840
 Animator:
@@ -6202,6 +6208,36 @@ Transform:
   m_Children:
   - {fileID: 769151964}
   m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1006075606
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1006075607}
+  m_Layer: 0
+  m_Name: wallCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1006075607
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006075606}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 918762837}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1242779662
